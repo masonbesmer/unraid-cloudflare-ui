@@ -5,10 +5,150 @@
     <title>Cloudflare Plugin</title>
     <style>
       body { font-family: Arial, sans-serif; margin: 2rem; }
+      label { display: block; margin-top: 1rem; }
+      select, input { margin-top: 0.5rem; }
+      .hidden { display: none; }
+      pre { background: #f4f4f4; padding: 1rem; margin-top: 1rem; }
     </style>
   </head>
   <body>
     <h1>Cloudflare Plugin</h1>
-    <p>This is a simple website served from the Cloudflare plugin.</p>
+
+    <label>
+      API Token:
+      <input type="password" id="apiKeyInput" placeholder="Enter API token" />
+    </label>
+    <button id="loadZonesBtn">Load Zones</button>
+
+    <div id="zoneSection" class="hidden">
+      <label for="zoneSelect">Select Zone:</label>
+      <select id="zoneSelect"></select>
+    </div>
+
+    <div id="recordSection" class="hidden">
+      <label for="recordSelect">Select DNS Record:</label>
+      <select id="recordSelect"></select>
+
+      <label>
+        Type:
+        <select id="recordType">
+          <option value="A">A</option>
+          <option value="AAAA">AAAA</option>
+          <option value="CNAME">CNAME</option>
+          <option value="TXT">TXT</option>
+        </select>
+      </label>
+
+      <label>
+        Name:
+        <input type="text" id="recordName" />
+      </label>
+
+      <label>
+        Content:
+        <input type="text" id="recordContent" />
+      </label>
+
+      <button id="updateRecordBtn">Update DNS Record</button>
+    </div>
+
+    <pre id="output"></pre>
+
+    <script>
+      const apiInput = document.getElementById('apiKeyInput');
+      const loadZonesBtn = document.getElementById('loadZonesBtn');
+      const zoneSection = document.getElementById('zoneSection');
+      const zoneSelect = document.getElementById('zoneSelect');
+      const recordSection = document.getElementById('recordSection');
+      const recordSelect = document.getElementById('recordSelect');
+      const recordType = document.getElementById('recordType');
+      const recordName = document.getElementById('recordName');
+      const recordContent = document.getElementById('recordContent');
+      const updateRecordBtn = document.getElementById('updateRecordBtn');
+      const output = document.getElementById('output');
+      let currentToken = '';
+      let zoneMap = {};
+      let recordMap = {};
+
+      loadZonesBtn.addEventListener('click', async () => {
+        currentToken = apiInput.value.trim();
+        if (!currentToken) {
+          alert('Please enter an API token.');
+          return;
+        }
+        const res = await fetch('https://api.cloudflare.com/client/v4/zones', {
+          headers: { 'Authorization': 'Bearer ' + currentToken, 'Content-Type': 'application/json' }
+        });
+        const data = await res.json();
+        if (!data.success) {
+          output.textContent = JSON.stringify(data, null, 2);
+          return;
+        }
+        zoneSelect.innerHTML = '';
+        zoneMap = {};
+        data.result.forEach(zone => {
+          zoneMap[zone.id] = zone.name;
+          const option = document.createElement('option');
+          option.value = zone.id;
+          option.textContent = zone.name;
+          zoneSelect.appendChild(option);
+        });
+        zoneSection.classList.remove('hidden');
+        zoneSelect.dispatchEvent(new Event('change'));
+      });
+
+      zoneSelect.addEventListener('change', async () => {
+        const zoneId = zoneSelect.value;
+        if (!zoneId) return;
+        const res = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records`, {
+          headers: { 'Authorization': 'Bearer ' + currentToken, 'Content-Type': 'application/json' }
+        });
+        const data = await res.json();
+        if (!data.success) {
+          output.textContent = JSON.stringify(data, null, 2);
+          return;
+        }
+        recordSelect.innerHTML = '';
+        recordMap = {};
+        data.result.forEach(record => {
+          recordMap[record.id] = record;
+          const option = document.createElement('option');
+          option.value = record.id;
+          option.textContent = `${record.type} ${record.name}`;
+          recordSelect.appendChild(option);
+        });
+        recordSection.classList.remove('hidden');
+        recordSelect.dispatchEvent(new Event('change'));
+      });
+
+      recordSelect.addEventListener('change', () => {
+        const recordId = recordSelect.value;
+        if (!recordId) return;
+        const record = recordMap[recordId];
+        recordType.value = record.type;
+        recordName.value = record.name;
+        recordContent.value = record.content;
+      });
+
+      updateRecordBtn.addEventListener('click', async () => {
+        const zoneId = zoneSelect.value;
+        const recordId = recordSelect.value;
+        const payload = {
+          type: recordType.value,
+          name: recordName.value,
+          content: recordContent.value
+        };
+        const res = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records/${recordId}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + currentToken,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+      });
+    </script>
   </body>
 </html>
