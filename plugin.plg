@@ -6,11 +6,11 @@
 
   <FILE Name="/usr/local/emhttp/plugins/cloudflare/scripts/cloudflare.sh">
     <URL>https://raw.githubusercontent.com/masonbesmer/unraid-cloudflare-ui/main/usr/local/emhttp/plugins/cloudflare/scripts/cloudflare.sh</URL>
-    <MD5></MD5>
+    <MD5>19f9a1fa46ed699202403e62de151854</MD5>
   </FILE>
 
   <FILE Name="/usr/local/emhttp/plugins/cloudflare/index.php">
     <URL>https://raw.githubusercontent.com/masonbesmer/unraid-cloudflare-ui/main/usr/local/emhttp/plugins/cloudflare/index.php</URL>
-    <MD5></MD5>
+    <MD5>c0b2f13550d107fa83690a6ceaaa1fc8</MD5>
   </FILE>
 </PLUGIN>
