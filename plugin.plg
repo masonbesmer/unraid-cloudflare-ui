@@ -9,8 +9,8 @@
     <MD5>19f9a1fa46ed699202403e62de151854</MD5>
   </FILE>
 
-  <FILE Name="/usr/local/emhttp/plugins/cloudflare/index.php">
-    <URL>https://raw.githubusercontent.com/masonbesmer/unraid-cloudflare-ui/main/usr/local/emhttp/plugins/cloudflare/index.php</URL>
-    <MD5>c0b2f13550d107fa83690a6ceaaa1fc8</MD5>
+  <FILE Name="/usr/local/emhttp/plugins/cloudflare/index.html">
+    <URL>https://raw.githubusercontent.com/masonbesmer/unraid-cloudflare-ui/main/usr/local/emhttp/plugins/cloudflare/index.html</URL>
+    <MD5>4d4f47bbfc45ab1a8603bc61de4daccb</MD5>
   </FILE>
 </PLUGIN>
