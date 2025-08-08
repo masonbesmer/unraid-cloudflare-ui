@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PLUGIN name="cloudflare" author="Your Name" version="0.1" pluginURL="https://github.com/masonbesmer/unraid-cloudflare-ui">
+<PLUGIN name="cloudflare" author="Your Name" version="0.2" pluginURL="https://github.com/masonbesmer/unraid-cloudflare-ui">
   <CHANGES>
-    Initial test release.
+    Add basic Cloudflare API UI for managing zones and DNS records.
   </CHANGES>
 
   <FILE Name="/usr/local/emhttp/plugins/cloudflare/scripts/cloudflare.sh">
@@ -11,6 +11,7 @@
 
   <FILE Name="/usr/local/emhttp/plugins/cloudflare/index.html">
     <URL>https://raw.githubusercontent.com/masonbesmer/unraid-cloudflare-ui/main/usr/local/emhttp/plugins/cloudflare/index.html</URL>
-    <MD5>9F4672524F826E6CC7CB39DE29745A2B</MD5>
+    <MD5>9f4672524f826e6cc7cb39de29745a2b</MD5>
+
   </FILE>
 </PLUGIN>
