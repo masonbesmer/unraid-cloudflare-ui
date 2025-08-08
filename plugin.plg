@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PLUGIN name="cloudflare" author="Your Name" version="0.1" pluginURL="https://github.com/yourusername/unraid-cloudflare-ui">
+  <CHANGES>
+    Initial test release.
+  </CHANGES>
+
+  <FILE Name="/usr/local/emhttp/plugins/cloudflare/scripts/cloudflare.sh">
+    <URL>https://raw.githubusercontent.com/yourusername/unraid-cloudflare-ui/main/usr/local/emhttp/plugins/cloudflare/scripts/cloudflare.sh</URL>
+    <MD5></MD5>
+  </FILE>
+
+  <FILE Name="/usr/local/emhttp/plugins/cloudflare/index.php">
+    <URL>https://raw.githubusercontent.com/yourusername/unraid-cloudflare-ui/main/usr/local/emhttp/plugins/cloudflare/index.php</URL>
+    <MD5></MD5>
+  </FILE>
+</PLUGIN>
