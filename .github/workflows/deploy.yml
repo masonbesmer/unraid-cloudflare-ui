@@ -35,3 +35,17 @@ jobs:
         with:
           name: plugin-files
           path: ${{ steps.collect.outputs.files }}
+
+      - name: Install plugin on Unraid server
+        env:
+          SSH_HOST: ${{ secrets.UNRAID_HOST }}
+          SSH_USER: ${{ secrets.UNRAID_USERNAME }}
+          SSH_KEY: ${{ secrets.UNRAID_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+          files=$(grep -oP '(?<=<FILE Name=")[^"]+' plugin.plg | sed 's|^/||')
+          scp plugin.plg $files "$SSH_USER@$SSH_HOST:/tmp/"
+          ssh "$SSH_USER@$SSH_HOST" "upgradepkg /tmp/plugin.plg"
