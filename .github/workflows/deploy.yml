@@ -1,0 +1,37 @@
+---
+# yamllint disable rule:line-length
+name: Deploy
+
+"on":
+  push: {}
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update plugin MD5 sums
+        run: |
+          files=$(grep -oP '(?<=<FILE Name=")[^"]+' plugin.plg)
+          for file in $files; do
+            repo_file=${file#/}
+            md5=$(md5sum "$repo_file" | cut -d' ' -f1)
+            perl -0 -i -pe "s|(<FILE Name=\\\"$file\\\">\n\s*<URL>[^\n]+\n\s*<MD5>)[0-9a-f]+|\\1${md5}|m" plugin.plg
+          done
+
+      - name: Collect plugin files
+        id: collect
+        run: |
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "plugin.plg" >> $GITHUB_OUTPUT
+          grep -oP '(?<=<FILE Name=")[^"]+' plugin.plg | sed 's|^/||' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Upload plugin files
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-files
+          path: ${{ steps.collect.outputs.files }}
