@@ -12,5 +12,6 @@
   <FILE Name="/usr/local/emhttp/plugins/cloudflare/index.html">
     <URL>https://raw.githubusercontent.com/masonbesmer/unraid-cloudflare-ui/main/usr/local/emhttp/plugins/cloudflare/index.html</URL>
     <MD5>9f4672524f826e6cc7cb39de29745a2b</MD5>
+
   </FILE>
 </PLUGIN>
